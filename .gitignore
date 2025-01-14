@@ -6,5 +6,5 @@ datasets/wake_word/positive/*
 !datasets/wake_word/positive/
 !datasets/wake_word/positive/.gitkeep
 !datasets/wake_word/negative/.gitkeep
-*.wav
+
 
