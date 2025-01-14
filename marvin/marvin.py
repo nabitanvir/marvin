@@ -7,14 +7,12 @@ import librosa
 import tensorflow as tf
 from tensorflow.keras import models
 
-# Constants
 SAMPLE_RATE = 16000
-NUM_SAMPLES = SAMPLE_RATE  # 1 second of audio
-MODEL_PATH = "/usr/src/app/models/wake_word_model.h5"  # Update with the actual path to your model
+NUM_SAMPLES = SAMPLE_RATE
+MODEL_PATH = "/usr/src/app/models/wake_word_model.h5"
 THRESHOLD = 0.5
 
 def preprocess_audio(audio):
-    """Preprocess audio to match model input."""
     audio = librosa.util.fix_length(audio, size=NUM_SAMPLES)
     mfcc = librosa.feature.mfcc(y=audio, sr=SAMPLE_RATE, n_mfcc=13)
     max_length = 32
@@ -26,14 +24,12 @@ def preprocess_audio(audio):
     return mfcc
 
 def load_model():
-    """Load the trained model."""
     if not os.path.exists(MODEL_PATH):
         raise FileNotFoundError(f"Model file not found at {MODEL_PATH}. Please train the model first.")
     model = models.load_model(MODEL_PATH)
     return model
 
 def load_audio_files(directory):
-    """Load audio files from a directory labeled as positive or negative."""
     files = []
     labels = []
     filenames = []
@@ -54,14 +50,12 @@ def load_audio_files(directory):
     return files, labels, filenames
 
 def predict(model, audio):
-    """Predict the probability of the wake word."""
     mfcc = preprocess_audio(audio)
-    mfcc = np.expand_dims(mfcc, axis=0)  # Shape: (1, 13, 32, 1)
+    mfcc = np.expand_dims(mfcc, axis=0)
     prediction = model.predict(mfcc)[0][0]
     return prediction
 
 def evaluate_files_individually(model, audio_files, labels, filenames):
-    """Evaluate each file and provide live feedback."""
     correct = 0
     total = len(audio_files)
 
